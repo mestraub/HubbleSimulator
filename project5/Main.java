@@ -16,7 +16,7 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		//program is executed 20 times
-		DataCollection dc = new DataCollection();
+		Satellite dc = new Satellite();
 		
 		dc.doThis();
 	}
