@@ -20,20 +20,27 @@ public class Satellite implements Runnable {
 		dc.doThis();
 	}
 	*/
+	
+	boolean lock;
+	
+	
 	public Satellite(){
 		
 	}
 	
 	public void run(){
-		Buffer shared = new Buffer();
-		int count = 0;
-		int randNum = 0;
-		Random num = new Random();
-		
-		
+
 		// while still space in the buffer
 		// keep pushing things to the buffer that are random
 		try{
+			
+			Buffer shared = new Buffer();
+			int count = 0;
+			int randNum = 0;
+			Random num = new Random();
+			
+			lock = true;
+			
 			while(count < shared.getSize()){
 			//for (int i = 0; i < count; i++){
 				randNum = num.nextInt(4096);

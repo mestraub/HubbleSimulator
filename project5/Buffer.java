@@ -12,27 +12,33 @@ package project5;
 public class Buffer implements Runnable{
 	public int[] B;
 //	Buffer buff;
-	int defaultSize = 5;
+	int size = 5;
 	boolean lock;
 	
 	public Buffer(){
-		B = new int[defaultSize];
+		B = new int[size];
 	//	buff = new Buffer();
 	}
 	
-	public int getSize(){
+	public Buffer(int size){
+		int newSize = 2^size;
+		B = new int[newSize];
+	}
+	
+	synchronized public int getSize(){
 		return B.length;
 	}
 	
-	public void add(int index, int value){
+	synchronized public void add(int index, int value){
 		B[index] = value;
 	}
 	
-	public void printBuffer(){
+	synchronized public void printBuffer(){
 		for (int i = 0; i < B.length; i++){
 			System.out.println(B[i]);
 		}
 	}
+
 	public void run() {
 		// TODO Auto-generated method stub
 	//	buff = new Buffer();
@@ -51,7 +57,7 @@ public class Buffer implements Runnable{
 	public void doThis(){
 		// intitilize the array with "boring" numbers
 		
-		B = new int[defaultSize];
+		//B = new int[defaultSize];
 		
 		for(int i = 0; i < B.length; i++){
 			B[i] = i;
