@@ -20,12 +20,12 @@ public class Satellite implements Runnable {
 		dc.doThis();
 	}
 	*/
+	Buffer buf;
+	boolean running; // so parent thread can say "stop"
 	
-	boolean lock;
 	
-	
-	public Satellite(){
-		
+	public Satellite(Buffer b){
+		buf = b;
 	}
 	
 	public void run(){
@@ -34,22 +34,24 @@ public class Satellite implements Runnable {
 		// keep pushing things to the buffer that are random
 		try{
 			
-			Buffer shared = new Buffer();
+		//	buf = new Buffer();
 			int count = 0;
 			int randNum = 0;
 			Random num = new Random();
-			
-			lock = true;
-			
-			while(count < shared.getSize()){
-			//for (int i = 0; i < count; i++){
+			 
+			running = true;
+			if(buf.isFull())
+				buf.waitForSpace();
+			while(running){
+				
 				randNum = num.nextInt(4096);
-				shared.add(count, randNum);
+				buf.add(randNum);
+				
 				System.out.println("Count num: " + count + " Random Number: " + randNum);
 			//	shared.printBuffer();
-				Thread.sleep(1000); //10,200 milliseconds
+				
+				Thread.sleep(100); //10,200 milliseconds
 				count++;
-			//}
 			}
 			
 			//shared.printBuffer();
@@ -61,6 +63,7 @@ public class Satellite implements Runnable {
 		
 	}
 	
+	/*
 	public void doThis(){
 		Satellite dc = new Satellite();
 		Thread t = new Thread(dc);
@@ -69,4 +72,5 @@ public class Satellite implements Runnable {
 		System.out.println("Ok, I'm done.") ;
 		System.exit(0);
 	}
+	*/
 }
