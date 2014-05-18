@@ -1,65 +1,71 @@
-/**
- * 
- */
 package project5;
 import java.util.Random;
 
 /**
- * @author Megan
- *
+ * This generates and adds elements into a shared, thread-safe buffer.
+ * 
+ * @version 05/17/2014
+ * @author Megan Straub <mstraub1@umbc.edu>
+ * CMSC 341 - Spring 2014 - Project 5
+ * Section 4
  */
 public class Satellite implements Runnable {
-
+	
 	/**
-	 * @param args
+	 * The thread safe array use to hold random integers.
 	 */
-	/*
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		DataCollection dc = new DataCollection();
-		dc.doThis();
-	}
-	*/
 	private Buffer b1;
-	private boolean running; // so parent thread can say "stop"
+	
+	/**
+	 * Tracks when the satellite thread is running, and is used to stop the thread.
+	 */
+	private boolean running;
+	
+	/**
+	 * The random number generator for the integers being added to the thread safe array.
+	 */
 	private Random randNum;
 	
-	
+	/**
+	 * A constructor that accepts the buffer that will hold random numbers.
+	 * This instantiates the running boolean to true, and creates the random
+	 * number generator.
+	 * 
+	 * @param b1 the buffer being used to hold integers
+	 */
 	public Satellite(Buffer b1){
 		this.b1 = b1;
 		this.running = true;
 		randNum = new Random();
 	}
 	
+	/**
+	 * This creates random integers between 0 and 4096 and adds them
+	 * to the buffer. This operation occurs only when running is true, and 
+	 * the buffer still has space. If the buffer is full it will wait until 
+	 * space is cleared.
+	 */
 	public void run(){
-
-		// while still space in the buffer
-		// keep pushing things to the buffer that are random
-		try{
-			int count = 0;
-			
+		try{		
 			running = true;
 
 			while(running){
 				
-				int num = randNum.nextInt(4097); // to count for 4096
-				
 				if(b1.isFull()){
 					Thread.sleep(1000);
 				}else{
-					b1.add(num); //change to randNum.nextInt(4097) later
-				//	System.out.println("Count num: " + count + " Random Number: " + num);
+					b1.add(randNum.nextInt(4097)); // counts for 4096
 				}
-			//	Thread.sleep(100); //10,200 milliseconds
-				count++;
 			}
-
 		}catch (InterruptedException e){
 			System.out.println("Oh no! An exepction in Satellite!!");
 			e.printStackTrace();	
 		}	
 	}
 	
+	/**
+	 * This is used to stop the satellite thread.
+	 */
 	public void end(){
 		running = false;
 	}

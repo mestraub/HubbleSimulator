@@ -1,39 +1,36 @@
-/**
- * 
- */
 package project5;
 
-import java.util.Random;
-
 /**
- * @author Megan
- *
+ * This runs the Hubble simulator project, and utilizes threads to run the simulation. 
+ * The purpose of the project is to: 1) collect data, 2) transfer the data in batches, 
+ * 3) sort and process the data stored in the shared buffers, and 4) display the data in image form. 
+ * 
+ * @version 05/17/2014
+ * @author Megan Straub <mstraub1@umbc.edu>
+ * CMSC 341 - Spring 2014 - Project 5
+ * Section 4
  */
 public class Main {
 
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		//program is executed 20 times
 
-        System.out.println("Available Processors: " + Runtime.getRuntime().availableProcessors());
-        System.out.println("Available Memory: " + Runtime.getRuntime().freeMemory() + "\n");
+        System.out.println("Available processors (cores ): " + Runtime.getRuntime().availableProcessors());
+        System.out.println("Available memory (bytes): " + Runtime.getRuntime().freeMemory() + "\n");
 
 		try{	
 	        int run = 1;
 
 	        for(int i = 8; i <= 11; i++){
-				//Set up Buffer thread
 
 				int n = (int)Math.pow(2, i);
 				int size = (int)Math.pow(n, 2) * 2;
 
-				Buffer b1 = new Buffer(size); // initilize with numbers
+				Buffer b1 = new Buffer(size); //creates the shared buffer
 				
 				Satellite sat;
-				sat = new Satellite(b1); // passes buffer through 
+				sat = new Satellite(b1); 
+				
+				//set up satellite thread
 				Thread satThread = new Thread(sat);
 				satThread.start();
 				
@@ -53,25 +50,14 @@ public class Main {
 					System.out.println("Run #" + run + " i=" + i + ", j=" + j + ", N=" + n +
 										", B1=" + size + ", B2=" + n*n + ", T=" + t);
 					System.out.println("Time mergesort: " + rcvr.getMergeTime() + "ms");
-					System.out.println("Saving image: " + rcvr.getPathName());
+					System.out.println("Saving image: " + rcvr.getPathName() + "\n");
 					
 					run++;
 				}
-				sat.end();
+				sat.end(); //tells satellite to stop generating data
 	        }
 		}catch(InterruptedException e){
 			System.out.println("Oh no! An exception!");
 		}
 	}
 }
-
-
-//	Random rand = new Random();
-
-//	n = rand.nextInt(4) + 8;
-//	Buffer b = new Buffer();
-//	b.setSize(n);
-	
-//	dc.doThis();
-	//int n;
-//	int n;
